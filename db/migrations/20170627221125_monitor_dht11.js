@@ -3,10 +3,10 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('humiture', function(t){
     t.increments()
-    t.integer('temperature').notNullable()
-    t.integer('humidity').notNullable()
+    t.string('temperature').notNullable()
+    t.string('humidity').notNullable()
     t.string('date_recorded')
-    t.timestamps(true)
+    t.timestamps(true, true)
   })
 }
 
