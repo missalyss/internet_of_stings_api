@@ -12,7 +12,7 @@ router.post('/login', (req, res, next) => {
 
   knex('users').where('username', username).first().then((row) => {
       user = row
-      console.log(user);
+      console.log(user, row);
       return bcrypt.compare(password, user.hashed_password)
     })
     .then(() => {
