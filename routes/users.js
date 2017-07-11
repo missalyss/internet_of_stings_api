@@ -12,12 +12,14 @@ router.post('/login', (req, res, next) => {
 
   knex('users').where('username', username).first().then((row) => {
       user = row
+      console.log(user);
       return bcrypt.compare(password, user.hashed_password)
     })
     .then(() => {
-      delete user.hashed_password
       console.log(user);
+      delete user.hashed_password
       let token = jwt.encode(user, process.env.JWT_TOKEN)
+      console.log(token);
       res.json({success: true, token: 'JWT ' + token})
     })
     .catch(bcrypt.MISMATCH_ERROR, () => {
