@@ -8,7 +8,6 @@ const jwt = require('jwt-simple');
 router.post('/login', (req, res, next) => {
   const { username, password } = req.body
   let user
-  console.log(username, password);
 
   knex('users').where('username', username).first().then((row) => {
       user = row
@@ -16,10 +15,8 @@ router.post('/login', (req, res, next) => {
       return bcrypt.compare(password, user.hashed_password)
     })
     .then(() => {
-      console.log(user);
       delete user.hashed_password
       let token = jwt.encode(user, process.env.JWT_TOKEN)
-      console.log(token);
       res.json({success: true, token: 'JWT ' + token})
     })
     .catch(bcrypt.MISMATCH_ERROR, () => {
@@ -47,7 +44,8 @@ router.post('/signup', (req, res, next) => {
     .then((users) => {
       const user = users[0]
       delete user.hashed_password
-      res.json(user)
+      let token = jwt.encode(user, process.env.JWT_TOKEN)
+      res.json({success: true, token: 'JWT ' + token})
     })
     .catch((err) => {
       next(err)
