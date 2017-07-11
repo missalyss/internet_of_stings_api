@@ -1,24 +1,26 @@
-var express = require('express')
-var path = require('path')
-var favicon = require('serve-favicon')
-var logger = require('morgan')
-var cookieParser = require('cookie-parser')
-var bodyParser = require('body-parser')
-var cors = require('cors')
+const express = require('express')
+const path = require('path')
+const favicon = require('serve-favicon')
+const logger = require('morgan')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const passport = require('passport')
+const jwt = require('jwt-simple');
 
-var index = require('./routes/index')
-var humiture = require('./routes/humiture')
-var users = require('./routes/users')
-var inspections = require('./routes/inspections')
+const index = require('./routes/index')
+const humiture = require('./routes/humiture')
+const users = require('./routes/users')
+const inspections = require('./routes/inspections')
 
-var app = express()
+const app = express()
 app.use(allowCrossDomain)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'hbs')
 
-// uncomment after placing your favicon in /public
+app.use(passport.initialize())
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(logger('dev'))
 app.use(bodyParser.json())
