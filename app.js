@@ -20,6 +20,7 @@ app.use(allowCrossDomain)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'hbs')
 
+// PARSE AND SETUP, ETC.
 app.use(passport.initialize())
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(logger('dev'))
@@ -28,11 +29,18 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+// SET UP ROUTES FOR API
 app.use('/', index)
 app.use('/humiture', humiture)
 app.use('/users', users)
 app.use('/inspections', inspections)
 
+// DOTENV CONFIG
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+// ALL CROSS DOMAIN, CORS
 function allowCrossDomain (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
