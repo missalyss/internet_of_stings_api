@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
     t.string('temperature').notNullable()
     t.string('humidity').notNullable()
     t.string('date_recorded')
+    t.integer('user_id')
     t.timestamps(true, true)
   })
 }

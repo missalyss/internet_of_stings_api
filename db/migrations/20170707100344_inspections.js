@@ -11,11 +11,11 @@ exports.up = function(knex, Promise) {
     t.boolean('queen')
     t.boolean('honey')
     t.text('notes')
-    t.foreign('user_id').references('users.id').onDelete('CASCADE')
+    t.integer('user_id')
     t.timestamps(true, true)
   })
 }
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTable('humiture')
+  return knex.schema.dropTable('inspections')
 }
