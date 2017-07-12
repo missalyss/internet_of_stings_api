@@ -17,7 +17,7 @@ router.post('/login', (req, res, next) => {
     .then(() => {
       delete user.hashed_password
       let token = jwt.encode(user, process.env.JWT_TOKEN)
-      res.json({success: true, token: 'JWT ' + token})
+      res.json({success: true, token: 'JWT ' + token, user:user})
     })
     .catch(bcrypt.MISMATCH_ERROR, () => {
       throw {
@@ -45,7 +45,7 @@ router.post('/signup', (req, res, next) => {
       const user = users[0]
       delete user.hashed_password
       let token = jwt.encode(user, process.env.JWT_TOKEN)
-      res.json({success: true, token: 'JWT ' + token})
+      res.json({success: true, token: 'JWT ' + token, user:user})
     })
     .catch((err) => {
       next(err)
