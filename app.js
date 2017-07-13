@@ -1,3 +1,10 @@
+'use strict'
+
+// DOTENV CONFIG
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express')
 const path = require('path')
 const favicon = require('serve-favicon')
@@ -34,11 +41,6 @@ app.use('/', index)
 app.use('/humiture', humiture)
 app.use('/users', users)
 app.use('/inspections', inspections)
-
-// DOTENV CONFIG
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
 
 // ALL CROSS DOMAIN, CORS
 function allowCrossDomain (req, res, next) {

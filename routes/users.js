@@ -7,8 +7,16 @@ const jwt = require('jwt-simple')
 // LOGIN
 router.post('/login', (req, res, next) => {
   const { username, password } = req.body
+
+  if (!username || !username.trim()) {
+   return next({ status: 400, message: 'Username must not be blank' })
+ }
+
+ if (!password) {
+   return next({ status: 400, message: 'Password must not be blank' })
+ }
+
   let user
-  let token
 
   knex('users').where('username', username).first().then((row) => {
       user = row
@@ -16,18 +24,8 @@ router.post('/login', (req, res, next) => {
     })
     .then(() => {
       delete user.hashed_password
-      token = jwt.encode(user, process.env.JWT_TOKEN)
-      return knex('inspections').where('inspections.user_id', user.id)
-    })
-    .then(inspectionResult => {
-        user.user_inspection = inspectionResult
-        return knex('humiture').where('humiture.user_id', user.id)
-    })
-    .then((humitureResult) => {
-      user.user_monitor = humitureResult
-    })
-    .then(() => {
-        res.json({success: true, token: 'JWT ' + token, user: user})
+      let token = jwt.encode(user, process.env.JWT_TOKEN)
+      res.json({success: true, token: 'JWT ' + token})
     })
     .catch(bcrypt.MISMATCH_ERROR, () => {
       throw {
@@ -42,6 +40,7 @@ router.post('/login', (req, res, next) => {
 
 // SIGN UP
 router.post('/signup', (req, res, next) => {
+
   bcrypt.hash(req.body.password, 12)
     .then((hashed_password) => {
       return knex('users')

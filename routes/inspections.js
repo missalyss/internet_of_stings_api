@@ -1,12 +1,40 @@
 const express = require('express')
 const router = express.Router()
 const knex = require('../db/connection')
+const jwt = require('jwt-simple');
+const passport = require('passport')
+require('../db/passport')(passport)
+
+getToken = function (headers) {
+  if (headers && headers.authorization) {
+    var parted = headers.authorization.split(' ')
+    if (parted.length === 2) {
+      return parted[1]
+    } else {
+      return null
+    }
+    return headers.authorization
+  } else {
+    return null
+  }
+}
 
 // INDEX LOGS
-router.get('/', function(req, res, next) {
-  knex('inspections').then(allLogs => {
-    res.json(allLogs)
-  })
+router.get('/', passport.authenticate('jwt', {session: false}),
+function(req, res, next) {
+  console.log('hello')
+  var token = getToken(req.headers)
+  console.log('token ', token)
+  if (token) {
+    var decoded = jwt.decode(token, process.env.JWT_TOKEN)
+    console.log('decoded ', decoded)
+    knex('inspections').where('user_id', decoded.id).then(allLogs => {
+      console.log('logs ', allLogs)
+      res.json(allLogs)
+    })
+  } else {
+    return res.status(403).json({success: false, msg: 'No token provided.'})
+  }
 })
 
 // SHOW LOG

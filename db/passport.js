@@ -3,16 +3,17 @@ const ExtractJwt = require('passport-jwt').ExtractJwt
 const knex = require('./connection')
 
 module.exports = function(passport) {
-  var opts = {}
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeader()
-  opts.token = process.env.JWT_TOKEN
+  var jwtOptions = {}
+  jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
+  jwtOptions.secretOrKey = process.env.JWT_TOKEN
 
-  passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    knex('users').where({id: jwt_payload.id}).then(user => {
+  passport.use(new JwtStrategy(jwtOptions,
+    function(jwt_payload, done) {
+    knex('users').where('id', jwt_payload.id).then((user) => {
       if (user) {
-          done(null, user)
+        done(null, user)
       } else {
-          done(null, false)
+        done(null, false, {message: 'No user'})
       }
     }).catch(err => {
       console.error(err)
