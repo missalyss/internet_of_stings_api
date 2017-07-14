@@ -6,7 +6,9 @@ const passport = require('passport')
 require('../db/passport')(passport)
 
 // INDEX STATS
-router.get('/', passport.authenticate('jwt', {session: false}), function(req, res, next) {
+router.get('/',
+passport.authenticate('jwt', {session: false}),
+function(req, res, next) {
   var token = getToken(req.headers)
   if (token) {
     var decoded = jwt.decode(token, process.env.JWT_TOKEN)
@@ -29,11 +31,11 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), function(req,
 })
 
 // CREATE STAT
-// router.post('/', passport.authenticate('jwt', {session: false}), function(req, res, next) {
-//   knex('humiture').insert(req.body, '*').then(newStat => {
-//     res.json(newStat)
-//   })
-// })
+router.post('/', function(req, res, next) {
+  knex('humiture').insert(req.body, '*').then(newStat => {
+    res.json(newStat)
+  })
+})
 
 // UPDATE STAT
 // router.put('/:id', passport.authenticate('jwt', {session: false}), function(req, res, next) {
