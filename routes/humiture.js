@@ -31,11 +31,11 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), function(req,
 })
 
 // CREATE STAT
-// router.post('/', function(req, res, next) {
-//   knex('humiture').insert(req.body, '*').then(newStat => {
-//     res.json(newStat)
-//   })
-// })
+router.post('/', function(req, res, next) {
+  knex('humiture').insert(req.body, '*').then(newStat => {
+    res.json(newStat)
+  })
+})
 
 // UPDATE STAT
 // router.put('/:id', passport.authenticate('jwt', {session: false}), function(req, res, next) {
