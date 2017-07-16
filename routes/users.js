@@ -3,6 +3,24 @@ const express = require('express')
 const knex = require('../db/connection')
 const router = express.Router()
 const jwt = require('jwt-simple')
+const passport = require('passport')
+require('../db/passport')(passport)
+
+// GET USER DATA
+router.get('/', passport.authenticate('jwt', {session: false}),
+function(req, res, next) {
+  var token = getToken(req.headers)
+  if (token) {
+    var decoded = jwt.decode(token, process.env.JWT_TOKEN)
+
+    knex('users').where('id', decoded.id).first().then(thisUser => {
+      delete thisUser.hashed_password
+      res.json(thisUser)
+    })
+  } else {
+    return res.status(403).json({success: false, msg: 'No token provided.'})
+  }
+})
 
 // LOGIN
 router.post('/login', (req, res, next) => {
@@ -25,7 +43,7 @@ router.post('/login', (req, res, next) => {
     .then(() => {
       delete user.hashed_password
       let token = jwt.encode(user, process.env.JWT_TOKEN)
-      res.json({success: true, token: 'JWT ' + token})
+      res.json({success: true, token: 'JWT ' + token, user: user})
     })
     .catch(bcrypt.MISMATCH_ERROR, () => {
       throw {
@@ -61,5 +79,18 @@ router.post('/signup', (req, res, next) => {
     })
 })
 
+getToken = function (headers) {
+  if (headers && headers.authorization) {
+    var parted = headers.authorization.split(' ')
+    if (parted.length === 2) {
+      return parted[1]
+    } else {
+      return null
+    }
+    return headers.authorization
+  } else {
+    return null
+  }
+}
 
 module.exports = router

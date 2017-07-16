@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const knex = require('../db/connection')
-const jwt = require('jwt-simple');
+const jwt = require('jwt-simple')
 const passport = require('passport')
 require('../db/passport')(passport)
 
