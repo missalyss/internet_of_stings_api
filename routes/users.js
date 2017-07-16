@@ -26,7 +26,6 @@ function(req, res, next) {
 
 router.put('/', passport.authenticate('jwt', {session: false}),
 function(req, res, next) {
-  console.log(req.body);
   var token = getToken(req.headers)
   if (token) {
     var decoded = jwt.decode(token, process.env.JWT_TOKEN)
@@ -34,6 +33,22 @@ function(req, res, next) {
     knex('users').where('id', decoded.id).update(req.body).then(thisUser => {
       delete thisUser.hashed_password
       res.json(thisUser)
+    })
+  } else {
+    return res.status(403).json({success: false, msg: 'No token provided.'})
+  }
+})
+
+// DELETE ACCOUNT
+router.delete('/', passport.authenticate('jwt', {session: false}),
+function(req, res, next) {
+  var token = getToken(req.headers)
+  if (token) {
+    var decoded = jwt.decode(token, process.env.JWT_TOKEN)
+
+    knex('users').where('id', decoded.id).del().then(() => {
+      console.log('user "deleted"');
+      res.status(200).json({msg: 'User gone forever'})
     })
   } else {
     return res.status(403).json({success: false, msg: 'No token provided.'})
