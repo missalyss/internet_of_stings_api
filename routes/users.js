@@ -25,6 +25,7 @@ function(req, res, next) {
 // LOGIN
 router.post('/login', (req, res, next) => {
   const { username, password } = req.body
+  let user
 
   if (!username || !username.trim()) {
    return next({ status: 400, message: 'Username must not be blank' })
@@ -33,8 +34,6 @@ router.post('/login', (req, res, next) => {
  if (!password) {
    return next({ status: 400, message: 'Password must not be blank' })
  }
-
-  let user
 
   knex('users').where('username', username).first().then((row) => {
       user = row
@@ -58,7 +57,6 @@ router.post('/login', (req, res, next) => {
 
 // SIGN UP
 router.post('/signup', (req, res, next) => {
-
   bcrypt.hash(req.body.password, 12)
     .then((hashed_password) => {
       return knex('users')
@@ -72,7 +70,7 @@ router.post('/signup', (req, res, next) => {
       const user = users[0]
       delete user.hashed_password
       let token = jwt.encode(user, process.env.JWT_TOKEN)
-      res.json({success: true, token: 'JWT ' + token, user:user})
+      res.json({success: true, token: 'JWT ' + token})
     })
     .catch((err) => {
       next(err)
