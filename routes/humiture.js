@@ -46,7 +46,9 @@ router.post('/', function(req, res, next) {
 // })
 
 // DESTROY STAT
-router.delete('/:id', passport.authenticate('jwt', {session: false}), function(req, res, next) {
+router.delete('/:id',
+// passport.authenticate('jwt', {session: false}),
+ function(req, res, next) {
   const id = req.params.id
   knex('humiture').where({id}).del().then(() => {
     res.send()
