@@ -7,6 +7,8 @@ To edit .py file, in terminal run
 `$ nano <YOUR_FILE_NAME>.py`
 
 You can touch a script in, echo the full pathname for running your file (with the while loop in it) and enter this command to start running in the background.
+// give yourself permission to run the script
+`$ chmod u=rwx script.sh`
 `$ /home/pi/honey_pi/script.sh & disown`
 
 Want to disconnect running in background?
