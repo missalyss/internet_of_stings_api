@@ -1,7 +1,7 @@
 
 # To Run Pi on Own
 After Pi is configured with SSH, ssh into it via the terminal
-`$ ssh pi@172.20.10.2`
+`$ ssh pi@<YOUR_PI'S_IP_ADDRESS_ON_THIS_NETWORK>`
 and sign in with Pi's password ( `honey_pi` )
 To edit .py file, in terminal run
 `$ nano <YOUR_FILE_NAME>.py`
