@@ -1,14 +1,14 @@
 'use strict'
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('humiture', function(t){
-    t.increments()
-    t.string('temperature').notNullable()
-    t.string('humidity').notNullable()
-    t.string('date_recorded')
-    t.integer('user_id')
-    t.timestamps(true, true)
-  })
+  // return knex.schema.createTable('humiture', function(t){
+  //   t.increments()
+  //   t.string('temperature').notNullable()
+  //   t.string('humidity').notNullable()
+  //   t.string('date_recorded')
+  //   t.integer('user_id')
+  //   t.timestamps(true, true)
+  // })
 }
 
 exports.down = function(knex, Promise) {
